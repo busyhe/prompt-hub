@@ -1,11 +1,12 @@
 {
-  "short_name": "TanStack Starter",
-  "name": "TanStack Starter",
-  "description": "A starter template for TanStack Start with Shadcn UI and Tailwind CSS",
+  "short_name": "Prompt Hub",
+  "name": "Prompt Hub",
+  "description": "收集、检索、复用你的 Prompt —— 文本、图片、视频、网页等各类 prompt 一站管理",
+  "lang": "zh-CN",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "64x64 48x48 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
@@ -16,11 +17,12 @@
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#ffffff",
+  "theme_color": "#2563eb",
   "background_color": "#ffffff"
 }

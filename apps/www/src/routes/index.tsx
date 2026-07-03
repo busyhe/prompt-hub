@@ -3,9 +3,13 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { PromptWall } from '@/components/prompts/prompt-wall'
 import { getPrompts } from '@/server/prompts'
+import { siteConfig } from '@/config/site'
 
 export const Route = createFileRoute('/')({
   loader: () => getPrompts(),
+  head: () => ({
+    links: [{ rel: 'canonical', href: siteConfig.url }],
+  }),
   component: HomePage,
 })
 

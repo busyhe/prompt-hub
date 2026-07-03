@@ -8,6 +8,7 @@ import { MediaPreview } from '@/components/prompts/media-preview'
 import { CopyPromptButton, ShareButton } from '@/components/prompts/copy-button'
 import { TypeBadgeContent } from '@/components/prompts/type-meta'
 import { getPrompt } from '@/server/prompts'
+import { siteConfig } from '@/config/site'
 
 export const Route = createFileRoute('/p/$id')({
   loader: async ({ params }) => {
@@ -15,14 +16,48 @@ export const Route = createFileRoute('/p/$id')({
     if (!item) throw notFound()
     return item
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.title} · Prompt Hub` },
-          { name: 'description', content: loaderData.description ?? loaderData.prompt.slice(0, 120) },
-        ]
-      : [],
-  }),
+  head: ({ loaderData }) => {
+    if (!loaderData) return { meta: [] }
+    const title = `${loaderData.title} · ${siteConfig.name}`
+    const description = loaderData.description ?? loaderData.prompt.slice(0, 120)
+    const url = `${siteConfig.url}/p/${loaderData.id}`
+    const mediaUrl = loaderData.media[0]?.url
+    const image =
+      mediaUrl && (loaderData.type === 'image' || loaderData.type === 'webpage')
+        ? mediaUrl
+        : siteConfig.ogImage
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:type', content: 'article' },
+        { property: 'og:url', content: url },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:image', content: image },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+        { name: 'twitter:image', content: image },
+      ],
+      links: [{ rel: 'canonical', href: url }],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: loaderData.title,
+            description,
+            url,
+            genre: loaderData.type,
+            keywords: loaderData.tags.join(','),
+            dateCreated: loaderData.createdAt,
+            inLanguage: 'zh-CN',
+          }),
+        },
+      ],
+    }
+  },
   component: PromptDetailPage,
 })
 
