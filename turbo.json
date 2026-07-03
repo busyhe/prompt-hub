@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".output/**",
+        ".tanstack/**",
+        ".nitro/**",
+        "dist/**"
+      ]
+    },
+    "lint": {},
+    "check-types": {},
+    "test": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalEnv": [
+    "VITE_GA_ID",
+    "VITE_SITE_URL",
+    "NOTION_TOKEN",
+    "NOTION_DATABASE_ID"
+  ]
+}
