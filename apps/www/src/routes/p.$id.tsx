@@ -1,7 +1,6 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Badge } from '@workspace/ui/components/badge'
-import { Button } from '@workspace/ui/components/button'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { MediaPreview } from '@/components/prompts/media-preview'
@@ -126,14 +125,6 @@ function PromptDetailPage() {
               <div className="mt-2 flex flex-wrap items-center gap-2 border-t pt-4">
                 <CopyPromptButton text={item.prompt} variant="default" size="default" />
                 <ShareButton id={item.id} title={item.title} size="default" />
-                {item.link && (
-                  <Button asChild variant="outline" size="default" className="gap-1.5">
-                    <a href={item.link} target="_blank" rel="noreferrer">
-                      <ExternalLink className="size-3.5" />
-                      查看示例
-                    </a>
-                  </Button>
-                )}
               </div>
             </div>
           </article>

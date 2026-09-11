@@ -30,6 +30,7 @@
     }
   },
   "globalEnv": [
+    "NODE_ENV",
     "VITE_GA_ID",
     "VITE_SITE_URL",
     "NOTION_TOKEN",

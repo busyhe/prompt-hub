@@ -42,7 +42,14 @@ function HomePage() {
         </section>
 
         <section className="container pb-16">
-          <PromptWall items={items} />
+          {source === 'unavailable' ? (
+            <div role="alert" className="py-16 text-center text-sm text-muted-foreground">
+              <p>暂时无法加载提示词，请稍后重试。</p>
+              <a href="/" className="mt-3 inline-block underline underline-offset-4">重新加载</a>
+            </div>
+          ) : (
+            <PromptWall items={items} />
+          )}
         </section>
       </main>
       <SiteFooter />

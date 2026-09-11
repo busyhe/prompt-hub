@@ -137,9 +137,14 @@ function pageToPrompt(page: any): PromptItem | null {
 
 /* ---------- public api ---------- */
 
-export async function fetchPrompts(): Promise<{ items: PromptItem[]; source: 'notion' | 'mock' }> {
+export async function fetchPrompts(): Promise<{ items: PromptItem[]; source: 'notion' | 'mock' | 'unavailable' }> {
   const notion = getClient()
-  if (!notion) return { items: mockPrompts, source: 'mock' }
+  if (!notion) {
+    if (process.env.NODE_ENV === 'production' || NOTION_TOKEN || NOTION_DATABASE_ID) {
+      return { items: [], source: 'unavailable' }
+    }
+    return { items: mockPrompts, source: 'mock' }
+  }
 
   try {
     const dsId = await getDataSourceId(notion)
@@ -163,20 +168,23 @@ export async function fetchPrompts(): Promise<{ items: PromptItem[]; source: 'no
 
     return { items, source: 'notion' }
   } catch (err) {
-    console.error('[notion] fetch failed, falling back to mock data:', err)
-    return { items: mockPrompts, source: 'mock' }
+    console.error('[notion] fetch failed:', err)
+    return { items: [], source: 'unavailable' }
   }
 }
 
 export async function fetchPromptById(id: string): Promise<PromptItem | null> {
   const notion = getClient()
-  if (!notion) return mockPrompts.find((p) => p.id === id) ?? null
+  if (!notion) {
+    if (process.env.NODE_ENV === 'production' || NOTION_TOKEN || NOTION_DATABASE_ID) return null
+    return mockPrompts.find((p) => p.id === id) ?? null
+  }
 
   try {
     const page = await notion.pages.retrieve({ page_id: id })
     return pageToPrompt(page)
   } catch (err) {
     console.error('[notion] page fetch failed:', err)
-    return mockPrompts.find((p) => p.id === id) ?? null
+    return null
   }
 }
