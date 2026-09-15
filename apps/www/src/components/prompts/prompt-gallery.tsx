@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { ArrowUpRight, ChevronLeft, ChevronRight, ImageOff, Images, Music2, Play } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight, ImageOff, Music2, Play } from 'lucide-react'
 import { Button } from '@workspace/ui/components/button'
 import { cn } from '@workspace/ui/lib/utils'
 import type { PromptItem, PromptMedia } from '@/lib/prompts/types'
@@ -66,13 +66,6 @@ export function PromptGallery({ item }: { item: PromptItem }) {
 
   return (
     <section aria-label="生成结果预览" className="min-w-0">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-sm font-medium">
-          <Images className="size-4 text-muted-foreground" />
-          生成结果
-        </h2>
-        <span className="text-xs tabular-nums text-muted-foreground">{count ? `${count} 个预览` : '暂无预览'}</span>
-      </div>
       <div className="overflow-hidden rounded-2xl border bg-muted/35">
         <div
           ref={stage}
