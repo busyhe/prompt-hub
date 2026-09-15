@@ -1,11 +1,8 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { Badge } from '@workspace/ui/components/badge'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { MediaPreview } from '@/components/prompts/media-preview'
-import { CopyPromptButton, ShareButton } from '@/components/prompts/copy-button'
-import { TypeBadgeContent } from '@/components/prompts/type-meta'
+import { PromptDetail } from '@/components/prompts/prompt-detail'
 import { getPrompt } from '@/server/prompts'
 import { siteConfig } from '@/config/site'
 
@@ -22,9 +19,7 @@ export const Route = createFileRoute('/p/$id')({
     const url = `${siteConfig.url}/p/${loaderData.id}`
     const mediaUrl = loaderData.media[0]?.url
     const image =
-      mediaUrl && (loaderData.type === 'image' || loaderData.type === 'webpage')
-        ? mediaUrl
-        : siteConfig.ogImage
+      mediaUrl && (loaderData.type === 'image' || loaderData.type === 'webpage') ? mediaUrl : siteConfig.ogImage
     return {
       meta: [
         { title },
@@ -67,7 +62,7 @@ function PromptDetailPage() {
     <div data-wrapper="" className="border-grid flex min-h-svh flex-1 flex-col">
       <SiteHeader />
       <main className="container-wrapper flex flex-1 flex-col">
-        <div className="container max-w-3xl py-8 md:py-12">
+        <div className="container w-full max-w-7xl py-6 md:py-8 lg:pb-16">
           <Link
             to="/"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -76,58 +71,7 @@ function PromptDetailPage() {
             返回全部 Prompt
           </Link>
 
-          <article className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-xs">
-            <MediaPreview item={item} interactive />
-
-            <div className="flex flex-col gap-4 p-6 md:p-8">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
-                  <TypeBadgeContent type={item.type} />
-                </Badge>
-                {item.model && <Badge variant="outline">{item.model}</Badge>}
-                <span className="ml-auto text-xs text-muted-foreground">
-                  {new Date(item.createdAt).toLocaleDateString('zh-CN')}
-                </span>
-              </div>
-
-              <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">{item.title}</h1>
-
-              {item.description && (
-                <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-              )}
-
-              <div className="relative">
-                <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-xl border bg-muted/50 p-4 pr-14 font-mono text-[13px] leading-relaxed">
-                  {item.prompt}
-                </pre>
-                <CopyPromptButton
-                  text={item.prompt}
-                  size="icon"
-                  variant="ghost"
-                  className="absolute right-2 top-2 size-8 bg-background/70 backdrop-blur"
-                  label=""
-                />
-              </div>
-
-              {item.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md bg-accent px-2 py-0.5 text-xs text-accent-foreground/80"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-2 flex flex-wrap items-center gap-2 border-t pt-4">
-                <CopyPromptButton text={item.prompt} variant="default" size="default" />
-                <ShareButton id={item.id} title={item.title} size="default" />
-              </div>
-            </div>
-          </article>
+          <PromptDetail key={item.id} item={item} />
         </div>
       </main>
       <SiteFooter />
